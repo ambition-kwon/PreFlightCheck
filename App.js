@@ -1,18 +1,15 @@
 import React from 'react';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import {Text, TouchableOpacity} from 'react-native';
-import {registerEmail} from './lib/login';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {NavigationContainer} from '@react-navigation/native';
+import RootStack from './screens/RootStack';
 
 function App() {
   return (
-    <SafeAreaProvider>
-      <SafeAreaView>
-        <TouchableOpacity
-          onPress={() => registerEmail('ddd@ddd.com', 'ddddddaaaaa')}>
-          <Text>Test</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <NavigationContainer>
+      <SafeAreaProvider>
+        <RootStack />
+      </SafeAreaProvider>
+    </NavigationContainer>
   );
 }
 
