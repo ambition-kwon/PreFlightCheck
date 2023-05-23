@@ -8,6 +8,7 @@ import AddScreen from './AddScreen';
 import AddCompleteScreen from './AddCompleteScreen';
 import MyPageScreen from './MyPageScreen';
 import ParkingScreen from './ParkingScreen';
+import CalendarScreen from './CalendarScreen';
 
 const stack = createNativeStackNavigator();
 
