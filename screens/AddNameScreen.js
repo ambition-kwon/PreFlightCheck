@@ -21,8 +21,8 @@ function AddNameScreen() {
           value={null}
           onChangeText={null}
           onSubmitEditing={() => Keyboard.dismiss()}
-          autoComplete={'email'}
-          keyboardType={'email-address'}
+          autoComplete={'off'}
+          keyboardType={'default'}
           secureTextEntry={false}
         />
         <AddNameCustomButton title={'설정완료'} onPress={null} />

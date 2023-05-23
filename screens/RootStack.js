@@ -16,16 +16,24 @@ function RootStack() {
   return (
     <stack.Navigator>
       <stack.Screen
-        name={'Login'}
-        component={LoginScreen}
-        options={{headerShown: false}}
+        name={'Select'}
+        component={SelectScreen}
+        options={{
+          headerTitle: '일정 목록',
+          headerTitleStyle: {color: 'white'},
+          headerStyle: {backgroundColor: '#020812'},
+        }}
       />
       <stack.Screen
         name={'AddName'}
         component={AddNameScreen}
         options={{headerShown: false}}
       />
-      <stack.Screen name={'Select'} component={SelectScreen} options={null} />
+      <stack.Screen
+        name={'Login'}
+        component={LoginScreen}
+        options={{headerShown: false}}
+      />
       <stack.Screen
         name={'Home'}
         component={HomeScreen}
