@@ -16,6 +16,15 @@ function RootStack() {
   return (
     <stack.Navigator>
       <stack.Screen
+        name={'Parking'}
+        component={ParkingScreen}
+        options={{
+          headerTitle: '주차 정보',
+          headerStyle: {backgroundColor: '#020812'},
+          headerTitleStyle: {color: 'white'},
+        }}
+      />
+      <stack.Screen
         name={'MyPage'}
         component={MyPageScreen}
         options={{
@@ -42,7 +51,6 @@ function RootStack() {
           headerTitleStyle: {color: 'white'},
         }}
       />
-      <stack.Screen name={'Parking'} component={ParkingScreen} options={null} />
       <stack.Screen
         name={'Select'}
         component={SelectScreen}
