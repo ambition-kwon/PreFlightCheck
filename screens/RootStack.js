@@ -16,6 +16,11 @@ function RootStack() {
   return (
     <stack.Navigator>
       <stack.Screen
+        name={'Home'}
+        component={HomeScreen}
+        options={{headerShown: false}}
+      />
+      <stack.Screen
         name={'Parking'}
         component={ParkingScreen}
         options={{
@@ -68,11 +73,6 @@ function RootStack() {
       <stack.Screen
         name={'Login'}
         component={LoginScreen}
-        options={{headerShown: false}}
-      />
-      <stack.Screen
-        name={'Home'}
-        component={HomeScreen}
         options={{headerShown: false}}
       />
       <stack.Screen
