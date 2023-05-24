@@ -16,6 +16,16 @@ function RootStack() {
   return (
     <stack.Navigator>
       <stack.Screen
+        name={'Calendar'}
+        component={CalendarScreen}
+        options={{
+          headerTitle: '일정추가',
+          headerStyle: {backgroundColor: '#020812'},
+          headerTitleStyle: {color: 'white'},
+        }}
+      />
+      <stack.Screen name={'Parking'} component={ParkingScreen} options={null} />
+      <stack.Screen
         name={'Select'}
         component={SelectScreen}
         options={{
@@ -39,11 +49,6 @@ function RootStack() {
         component={HomeScreen}
         options={{headerShown: false}}
       />
-      <stack.Screen
-        name={'Calendar'}
-        component={CalendarScreen}
-        options={null}
-      />
       <stack.Screen name={'Add'} component={AddScreen} options={null} />
       <stack.Screen
         name={'AddComplete'}
@@ -51,7 +56,6 @@ function RootStack() {
         options={{headerShown: false}}
       />
       <stack.Screen name={'MyPage'} component={MyPageScreen} options={null} />
-      <stack.Screen name={'Parking'} component={ParkingScreen} options={null} />
     </stack.Navigator>
   );
 }

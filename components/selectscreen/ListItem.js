@@ -1,7 +1,8 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-function ListItem({one, two, three, four, five, end}) {
+//TODO: startDate지나면 Touch불가능 하게끔 변경
+function ListItem({one, two, three, four, five}) {
   return (
     <TouchableOpacity activeOpacity={0.7}>
       <View style={styles.container}>

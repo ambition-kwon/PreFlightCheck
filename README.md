@@ -11,4 +11,5 @@
 - @react-navigation/native-stack
 - react-native-vector-icons
 - firebase
-
+- axios
+- react-native-calendars
