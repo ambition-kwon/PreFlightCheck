@@ -12,8 +12,9 @@ import {
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 function AddScreen() {
-  const [departureTime, onChangeDepartureTime] = useState();
-  const [arrivalTime, onChangeArrivalTime] = useState();
+  const [departureTime, onChangeDepartureTime] =
+    useState('시간을 선택해주세요');
+  const [arrivalTime, onChangeArrivalTime] = useState('시간을 선택해주세요');
   const [visible1, setVisible1] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const onPressTime1 = () => {
@@ -55,7 +56,7 @@ function AddScreen() {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        <View style={{height: 60}} />
+        <View style={{height: 50}} />
         <View style={styles.subContainer}>
           <Text style={styles.titleText}>출발공항</Text>
           <TouchableOpacity
@@ -164,7 +165,7 @@ function AddScreen() {
           />
         </View>
         <View style={styles.subContainer}>
-          <Text style={styles.titleText}>이륙시각</Text>
+          <Text style={styles.titleText}>출발시각</Text>
           <TouchableOpacity
             style={styles.select}
             activeOpacity={0.7}
@@ -189,14 +190,14 @@ function AddScreen() {
           mode={'time'}
           onConfirm={onConfirm1}
           onCancel={onCancel1}
-          is24Hour
+          locale="ko"
         />
         <DateTimePickerModal
           isVisible={visible2}
           mode={'time'}
           onConfirm={onConfirm2}
           onCancel={onCancel2}
-          is24Hour
+          locale="ko"
         />
       </View>
     </TouchableWithoutFeedback>

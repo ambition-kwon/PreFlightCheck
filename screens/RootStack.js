@@ -16,6 +16,15 @@ function RootStack() {
   return (
     <stack.Navigator>
       <stack.Screen
+        name={'MyPage'}
+        component={MyPageScreen}
+        options={{
+          headerTitle: '마이 페이지',
+          headerStyle: {backgroundColor: '#020812'},
+          headerTitleStyle: {color: 'white'},
+        }}
+      />
+      <stack.Screen
         name={'Add'}
         component={AddScreen}
         options={{
@@ -63,7 +72,6 @@ function RootStack() {
         component={AddCompleteScreen}
         options={{headerShown: false}}
       />
-      <stack.Screen name={'MyPage'} component={MyPageScreen} options={null} />
     </stack.Navigator>
   );
 }
