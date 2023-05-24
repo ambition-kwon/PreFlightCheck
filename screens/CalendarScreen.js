@@ -35,7 +35,6 @@ function CalendarScreen() {
           <Text style={styles.text1}>선택된 일정 : {selectDate}</Text>
         </>
       )}
-
       <View style={styles.under}>
         <TouchableOpacity activeOpacity={0.7} style={styles.touch}>
           <Text style={styles.text2}>세부 일정 추가</Text>

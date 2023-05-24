@@ -13,3 +13,7 @@
 - firebase
 - axios
 - react-native-calendars
+- react-native-modal-datetime-picker
+- react-native-modal-datetime-picker 
+- @react-native-community/datetimepicker
+
