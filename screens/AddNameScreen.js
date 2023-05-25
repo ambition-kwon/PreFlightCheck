@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -9,23 +9,31 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import AddNameCustomInput from '../components/addnamescreen/AddNameCustomInput';
 import AddNameCustomButton from '../components/addnamescreen/AddNameCustomButton';
 import {useNavigation} from '@react-navigation/native';
+import {auth} from '../lib/firebase';
 
 function AddNameScreen() {
   const navigation = useNavigation();
+  const [nickName, setNickName] = useState('');
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
         <Text style={styles.titleText}>사용자 이름을 입력해주세요</Text>
         <AddNameCustomInput
           placeholder={'사용자 이름'}
-          value={null}
-          onChangeText={null}
+          value={nickName}
+          onChangeText={setNickName}
           onSubmitEditing={() => Keyboard.dismiss()}
           autoComplete={'off'}
           keyboardType={'default'}
           secureTextEntry={false}
         />
-        <AddNameCustomButton title={'설정완료'} onPress={null} />
+        <AddNameCustomButton
+          title={'설정완료'}
+          onPress={() => {
+            auth.currentUser.displayName = nickName;
+            navigation.reset({routes: [{name: 'Select'}]});
+          }}
+        />
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

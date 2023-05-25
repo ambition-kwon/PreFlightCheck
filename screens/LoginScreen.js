@@ -1,4 +1,5 @@
-import React from 'react';
+//TODO: Auto Login 구현
+import React, {useState, useContext} from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,16 +9,23 @@ import {
   Platform,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomInput from '../components/loginscreen/CustomInput';
 import LoginCustomButton from '../components/loginscreen/LoginCustomButton';
 import RegisterCustomButton from '../components/loginscreen/RegisterCustomButton';
 import {useNavigation} from '@react-navigation/native';
+import {loginAnonymous, loginEmail, registerEmail} from '../lib/login';
+import LoginContext from '../contexts/LoginContext';
 
 function LoginScreen({route}) {
   const navigation = useNavigation();
   const change = route.params ? route.params.change : undefined;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const {onCreate} = useContext(LoginContext);
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <KeyboardAvoidingView
@@ -31,8 +39,8 @@ function LoginScreen({route}) {
           <Text style={styles.titleText}>PreFlightCheck</Text>
           <CustomInput
             placeholder={'이메일'}
-            value={null}
-            onChangeText={null}
+            value={email}
+            onChangeText={setEmail}
             onSubmitEditing={() => Keyboard.dismiss()}
             autoComplete={'email'}
             keyboardType={'email-address'}
@@ -40,9 +48,8 @@ function LoginScreen({route}) {
           />
           <CustomInput
             placeholder={'비밀번호'}
-            value={null}
-            onChangeText={null}
-            onSubmitEditing={null}
+            value={password}
+            onChangeText={setPassword}
             autoComplete={'off'}
             keyboardType={'default'}
             secureTextEntry={true}
@@ -50,9 +57,8 @@ function LoginScreen({route}) {
           {change ? (
             <CustomInput
               placeholder={'비밀번호 재확인'}
-              value={null}
-              onChangeText={null}
-              onSubmitEditing={null}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
               autoComplete={'off'}
               keyboardType={'default'}
               secureTextEntry={true}
@@ -60,10 +66,18 @@ function LoginScreen({route}) {
           ) : null}
           {!change ? (
             <>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  loginAnonymous(navigation);
+                }}>
                 <Text style={styles.subText}>아니요, 계정없이 이용할래요</Text>
               </TouchableOpacity>
-              <LoginCustomButton onPress={null} title={'로그인'} />
+              <LoginCustomButton
+                onPress={() => {
+                  loginEmail(email, password, onCreate, navigation);
+                }}
+                title={'로그인'}
+              />
               <RegisterCustomButton
                 title={'회원가입'}
                 onPress={() => navigation.push('Login', {change: true})}
@@ -71,7 +85,18 @@ function LoginScreen({route}) {
             </>
           ) : (
             <>
-              <LoginCustomButton onPress={null} title={'회원가입'} />
+              <LoginCustomButton
+                onPress={() => {
+                  if (password === confirmPassword) {
+                    registerEmail(email, password, onCreate, navigation);
+                  } else {
+                    Alert.alert('알림', '비밀번호가 일치하지 않습니다', [
+                      {text: '확인'},
+                    ]);
+                  }
+                }}
+                title={'회원가입'}
+              />
               <RegisterCustomButton
                 onPress={() => navigation.pop()}
                 title={'로그인'}

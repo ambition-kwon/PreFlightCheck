@@ -7,7 +7,7 @@ function CalendarScreen() {
   const markedDates = {
     [selectDate || '']: {
       selected: true,
-      selectedColor: '#9CE6FC', // 선택된 날짜의 색상
+      selectedColor: '#9CE6FC',
     },
   };
   return (
@@ -32,7 +32,7 @@ function CalendarScreen() {
         </>
       ) : (
         <>
-          <Text style={styles.text1}>선택된 일정 : {selectDate}</Text>
+          <Text style={styles.text1}>선택 일정 : {selectDate}</Text>
         </>
       )}
       <View style={styles.under}>

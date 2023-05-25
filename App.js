@@ -3,15 +3,18 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
 import RootStack from './screens/RootStack';
 import {StatusBar} from 'react-native';
+import {LoginContextProvider} from './contexts/LoginContext';
 
 function App() {
   return (
-    <NavigationContainer>
-      <SafeAreaProvider>
-        <StatusBar barStyle={'light-content'} />
-        <RootStack />
-      </SafeAreaProvider>
-    </NavigationContainer>
+    <LoginContextProvider>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <StatusBar barStyle={'light-content'} />
+          <RootStack />
+        </SafeAreaProvider>
+      </NavigationContainer>
+    </LoginContextProvider>
   );
 }
 

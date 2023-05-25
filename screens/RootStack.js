@@ -14,7 +14,15 @@ const stack = createNativeStackNavigator();
 
 function RootStack() {
   return (
-    <stack.Navigator>
+    <stack.Navigator
+      screenOptions={{
+        headerTintColor: 'white',
+      }}>
+      <stack.Screen
+        name={'Login'}
+        component={LoginScreen}
+        options={{headerShown: false}}
+      />
       <stack.Screen
         name={'Home'}
         component={HomeScreen}
@@ -68,11 +76,6 @@ function RootStack() {
       <stack.Screen
         name={'AddName'}
         component={AddNameScreen}
-        options={{headerShown: false}}
-      />
-      <stack.Screen
-        name={'Login'}
-        component={LoginScreen}
         options={{headerShown: false}}
       />
       <stack.Screen

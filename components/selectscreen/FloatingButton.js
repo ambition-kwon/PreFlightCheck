@@ -2,9 +2,12 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-function FloatingButton() {
+function FloatingButton({onPress}) {
   return (
-    <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+    <TouchableOpacity
+      style={styles.button}
+      activeOpacity={0.7}
+      onPress={onPress}>
       <Icon name={'add'} size={40} color={'black'} />
     </TouchableOpacity>
   );
