@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,15 +8,32 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ActionSheetIOS,
+  Alert,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DataContext from '../contexts/DataContext';
+import {useNavigation} from '@react-navigation/native';
 
-function AddScreen() {
-  const [departureTime, onChangeDepartureTime] =
-    useState('시간을 선택해주세요');
-  const [arrivalTime, onChangeArrivalTime] = useState('시간을 선택해주세요');
+function AddScreen({route}) {
+  const navigation = useNavigation();
+  const {onCreate, onLoad} = useContext(DataContext);
+  const [departureTime, onChangeDepartureTime] = useState('');
+  const [arrivalTime, onChangeArrivalTime] = useState('');
   const [visible1, setVisible1] = useState(false);
   const [visible2, setVisible2] = useState(false);
+  const [airline, setAirline] = useState('');
+  const [arrivalAirport, setArrivalAirport] = useState('');
+  const [bookingNumber, setBookingNumber] = useState('');
+  const [departureAirport, setDepartureAirport] = useState('');
+  const [flight, setFlight] = useState('');
+  //출발공항, 도착공항 자동 변경 함수
+  useEffect(() => {
+    if (departureAirport === 'CJU') {
+      setArrivalAirport('GMP');
+    } else if (departureAirport === 'GMP') {
+      setArrivalAirport('CJU');
+    }
+  }, [departureAirport]);
   const onPressTime1 = () => {
     // 시간 클릭 시
     setVisible1(true); // 모달 open
@@ -70,14 +87,14 @@ function AddScreen() {
                 },
                 buttonIndex => {
                   if (buttonIndex === 0) {
-                    console.log('김포공항 선택');
+                    setDepartureAirport('GMP');
                   } else if (buttonIndex === 1) {
-                    console.log('제주공항 선택');
+                    setDepartureAirport('CJU');
                   }
                 },
               );
             }}>
-            <Text style={styles.selectText}>GMP</Text>
+            <Text style={styles.selectText}>{departureAirport}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.subContainer}>
@@ -93,14 +110,14 @@ function AddScreen() {
                 },
                 buttonIndex => {
                   if (buttonIndex === 0) {
-                    console.log('김포공항 선택');
+                    setArrivalAirport('GMP');
                   } else if (buttonIndex === 1) {
-                    console.log('제주공항 선택');
+                    setArrivalAirport('CJU');
                   }
                 },
               );
             }}>
-            <Text style={styles.selectText}>CJU</Text>
+            <Text style={styles.selectText}>{arrivalAirport}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.subContainer}>
@@ -109,6 +126,8 @@ function AddScreen() {
             style={styles.select}
             activeOpacity={0.7}
             placeholder={'(예)C42E41'}
+            value={bookingNumber}
+            onChangeText={setBookingNumber}
           />
         </View>
         <View style={styles.subContainer}>
@@ -134,26 +153,26 @@ function AddScreen() {
                 },
                 buttonIndex => {
                   if (buttonIndex === 0) {
-                    console.log('대한항공 선택');
+                    setAirline('대한항공');
                   } else if (buttonIndex === 1) {
-                    console.log('아시아나항공 선택');
+                    setAirline('아시아나');
                   } else if (buttonIndex === 2) {
-                    console.log('제주항공 선택');
+                    setAirline('제주항공');
                   } else if (buttonIndex === 3) {
-                    console.log('티웨이항공 선택');
+                    setAirline('티웨이항공');
                   } else if (buttonIndex === 4) {
-                    console.log('이스타항공 선택');
+                    setAirline('이스타항공');
                   } else if (buttonIndex === 5) {
-                    console.log('진에어 선택');
+                    setAirline('진에어');
                   } else if (buttonIndex === 6) {
-                    console.log('에어부산 선택');
+                    setAirline('에어부산');
                   } else if (buttonIndex === 7) {
-                    console.log('에어서울 선택');
+                    setAirline('에어서울');
                   }
                 },
               );
             }}>
-            <Text style={styles.selectText}>진에어</Text>
+            <Text style={styles.selectText}>{airline}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.subContainer}>
@@ -162,6 +181,8 @@ function AddScreen() {
             style={styles.select}
             activeOpacity={0.7}
             placeholder={'(예)JE341'}
+            value={flight}
+            onChangeText={setFlight}
           />
         </View>
         <View style={styles.subContainer}>
@@ -182,7 +203,36 @@ function AddScreen() {
             <Text style={styles.selectText}>{arrivalTime}</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity activeOpacity={0.7} style={styles.touch}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.touch}
+          onPress={() => {
+            if (
+              flight === '' ||
+              departureTime === '' ||
+              departureAirport === '' ||
+              bookingNumber === '' ||
+              arrivalTime === '' ||
+              arrivalTime === '' ||
+              arrivalAirport === '' ||
+              airline === ''
+            ) {
+              Alert.alert('알림', '모든 정보를 기입해주세요', [{text: '확인'}]);
+            } else {
+              onCreate(
+                route.params.startDate,
+                bookingNumber,
+                flight,
+                airline,
+                departureAirport,
+                arrivalAirport,
+                departureTime,
+                arrivalTime,
+              );
+              onLoad();
+              navigation.reset({routes: [{name: 'Select'}]});
+            }
+          }}>
           <Text style={styles.text2}>일정 등록</Text>
         </TouchableOpacity>
         <DateTimePickerModal

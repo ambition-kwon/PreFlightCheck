@@ -24,11 +24,6 @@ function RootStack() {
         options={{headerShown: false}}
       />
       <stack.Screen
-        name={'Home'}
-        component={HomeScreen}
-        options={{headerShown: false}}
-      />
-      <stack.Screen
         name={'Parking'}
         component={ParkingScreen}
         options={{
@@ -81,6 +76,11 @@ function RootStack() {
       <stack.Screen
         name={'AddComplete'}
         component={AddCompleteScreen}
+        options={{headerShown: false}}
+      />
+      <stack.Screen
+        name={'Home'}
+        component={HomeScreen}
         options={{headerShown: false}}
       />
     </stack.Navigator>

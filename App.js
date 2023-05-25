@@ -4,17 +4,20 @@ import {NavigationContainer} from '@react-navigation/native';
 import RootStack from './screens/RootStack';
 import {StatusBar} from 'react-native';
 import {LoginContextProvider} from './contexts/LoginContext';
+import {DataContextProvider} from './contexts/DataContext';
 
 function App() {
   return (
-    <LoginContextProvider>
-      <NavigationContainer>
-        <SafeAreaProvider>
-          <StatusBar barStyle={'light-content'} />
-          <RootStack />
-        </SafeAreaProvider>
-      </NavigationContainer>
-    </LoginContextProvider>
+    <DataContextProvider>
+      <LoginContextProvider>
+        <NavigationContainer>
+          <SafeAreaProvider>
+            <StatusBar barStyle={'light-content'} />
+            <RootStack />
+          </SafeAreaProvider>
+        </NavigationContainer>
+      </LoginContextProvider>
+    </DataContextProvider>
   );
 }
 

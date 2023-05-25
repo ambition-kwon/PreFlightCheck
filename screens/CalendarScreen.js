@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity, Alert} from 'react-native';
 import {Calendar} from 'react-native-calendars/src/index';
+import {useNavigation} from '@react-navigation/native';
 
 function CalendarScreen() {
   const [selectDate, setSelectDate] = useState('');
@@ -10,6 +11,7 @@ function CalendarScreen() {
       selectedColor: '#9CE6FC',
     },
   };
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Calendar
@@ -36,7 +38,16 @@ function CalendarScreen() {
         </>
       )}
       <View style={styles.under}>
-        <TouchableOpacity activeOpacity={0.7} style={styles.touch}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.touch}
+          onPress={() => {
+            if (selectDate === '') {
+              Alert.alert('알림', '일정을 선택해주세요', [{text: '확인'}]);
+            } else {
+              navigation.navigate('Add', {startDate: selectDate});
+            }
+          }}>
           <Text style={styles.text2}>세부 일정 추가</Text>
         </TouchableOpacity>
       </View>

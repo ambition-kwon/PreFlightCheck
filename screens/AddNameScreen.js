@@ -10,6 +10,7 @@ import AddNameCustomInput from '../components/addnamescreen/AddNameCustomInput';
 import AddNameCustomButton from '../components/addnamescreen/AddNameCustomButton';
 import {useNavigation} from '@react-navigation/native';
 import {auth} from '../lib/firebase';
+import {updateProfile} from 'firebase/auth';
 
 function AddNameScreen() {
   const navigation = useNavigation();
@@ -30,8 +31,12 @@ function AddNameScreen() {
         <AddNameCustomButton
           title={'설정완료'}
           onPress={() => {
-            auth.currentUser.displayName = nickName;
-            navigation.reset({routes: [{name: 'Select'}]});
+            updateProfile(auth.currentUser, {displayName: nickName}).then(
+              () => {
+                console.log('사용자 이름 반영 완료');
+                navigation.reset({routes: [{name: 'Select'}]});
+              },
+            );
           }}
         />
       </SafeAreaView>
