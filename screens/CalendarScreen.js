@@ -15,7 +15,6 @@ function CalendarScreen() {
   return (
     <View style={styles.container}>
       <Calendar
-        style={styles.calendar}
         onDayPress={day => {
           setSelectDate(day.dateString);
         }}

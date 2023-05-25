@@ -16,7 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 
 function AddScreen({route}) {
   const navigation = useNavigation();
-  const {onCreate, onLoad} = useContext(DataContext);
+  const {onCreate} = useContext(DataContext);
   const [departureTime, onChangeDepartureTime] = useState('');
   const [arrivalTime, onChangeArrivalTime] = useState('');
   const [visible1, setVisible1] = useState(false);

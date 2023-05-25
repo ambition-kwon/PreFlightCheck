@@ -73,13 +73,7 @@ function SelectScreen() {
   };
   return (
     <View style={styles.container}>
-      <FlatList
-        ItemSeparatorComponent={() => <View style={styles.seperator} />}
-        style={styles.list}
-        data={arrayData}
-        renderItem={renderItem}
-        // keyExtractor={item => item.documentID.toString()}
-      />
+      <FlatList style={styles.list} data={arrayData} renderItem={renderItem} />
       <FloatingButton
         onPress={() => {
           navigation.navigate('Calendar');
