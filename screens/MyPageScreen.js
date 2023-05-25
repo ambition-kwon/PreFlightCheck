@@ -1,9 +1,25 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {head} from 'axios';
+import {auth} from '../lib/firebase';
+import DataContext from '../contexts/DataContext';
+import {logout} from '../lib/login';
+import {useNavigation} from '@react-navigation/native';
 
 function MyPageScreen() {
+  const navigation = useNavigation();
+  const {Data} = useContext(DataContext);
+  const today = new Date();
+  let beforeSchedule = 0;
+  let afterSchedule = 0;
+  Data.forEach(item => {
+    const itemDate = new Date(item.startDate);
+    if (itemDate < today) {
+      afterSchedule++;
+    } else {
+      beforeSchedule++;
+    }
+  });
   return (
     <View style={styles.container}>
       <View style={{height: 36}} />
@@ -12,7 +28,7 @@ function MyPageScreen() {
           <View style={styles.circle}>
             <Icon name={'person'} size={30} color={'black'} />
           </View>
-          <Text style={styles.name}>안예원님</Text>
+          <Text style={styles.name}>{auth.currentUser.displayName}님</Text>
           <Text style={styles.enjoy}>{'  즐거운 비행 되십시오'}</Text>
         </View>
         <View style={{height: 20}} />
@@ -20,16 +36,21 @@ function MyPageScreen() {
           <View style={styles.second}>
             <Text style={styles.text1}>예정된 일정</Text>
             <View style={{height: 6}} />
-            <Text style={styles.text2}>1</Text>
+            <Text style={styles.text2}>{beforeSchedule}</Text>
           </View>
           <View style={styles.third}>
             <Text style={styles.text3}>완료된 일정</Text>
             <View style={{height: 6}} />
-            <Text style={styles.text4}>2</Text>
+            <Text style={styles.text4}>{afterSchedule}</Text>
           </View>
         </View>
       </View>
-      <TouchableOpacity activeOpacity={0.7} style={styles.button}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={styles.button}
+        onPress={() => {
+          logout(navigation);
+        }}>
         <Text style={styles.logout}>로그아웃</Text>
       </TouchableOpacity>
     </View>

@@ -3,8 +3,20 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {auth} from '../lib/firebase';
+import {useNavigation} from '@react-navigation/native';
+function HomeScreen({route}) {
+  const navigation = useNavigation();
+  const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+  const to = new Date();
+  const year = to.getFullYear();
+  const month = String(to.getMonth() + 1).padStart(2, '0');
+  const day = String(to.getDate()).padStart(2, '0');
+  const today = `${year}-${month}-${day}`;
+  const timeDiff =
+    new Date(today).getTime() - new Date(route.params.item.startDate).getTime();
+  const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-function HomeScreen() {
   const [time, setTime] = useState('00:00');
   const [visible1, setVisible1] = useState(false);
   const onPressTime1 = () => {
@@ -29,21 +41,42 @@ function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.profileContainer}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity activeOpacity={0.7}>
-            <Text style={styles.name}>노네임</Text>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              navigation.navigate('MyPage');
+            }}>
+            <Text style={styles.name}>{auth.currentUser.displayName}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.myBox} activeOpacity={0.7}>
+          <TouchableOpacity
+            style={styles.myBox}
+            activeOpacity={0.7}
+            onPress={() => {
+              navigation.navigate('Select');
+            }}>
             <Text style={styles.my}>내 일정</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.circle} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.circle}
+          activeOpacity={0.7}
+          onPress={() => {
+            navigation.navigate('MyPage');
+          }}>
           <Icon name={'person'} size={30} color={'black'} />
         </TouchableOpacity>
       </View>
       <View style={{height: 15}} />
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => {
+          navigation.navigate('Select');
+        }}>
         <View style={styles.schedule}>
-          <Text style={styles.scheduleText}>2023-05-12(금)</Text>
+          <Text style={styles.scheduleText}>
+            {route.params.item.startDate}(
+            {daysOfWeek[new Date(route.params.item.startDate).getDay()]})
+          </Text>
         </View>
       </TouchableOpacity>
       <View style={{height: 20}} />
@@ -55,14 +88,18 @@ function HomeScreen() {
             <Text style={styles.ticketText1}>항공편명</Text>
           </View>
           <View style={styles.ticketSubBox2}>
-            <Text style={styles.ticketText2}>C22F49</Text>
-            <Text style={styles.ticketText2}>대한항공</Text>
-            <Text style={styles.ticketText2}>LJ304</Text>
+            <Text style={styles.ticketText2}>
+              {route.params.item.bookingNumber}
+            </Text>
+            <Text style={styles.ticketText2}>{route.params.item.airline}</Text>
+            <Text style={styles.ticketText2}>{route.params.item.flight}</Text>
           </View>
         </View>
         <View style={styles.ticketBox2}>
           <Text style={styles.ticketText3}>비행기 탑승까지</Text>
-          <Text style={styles.ticketText4}>D-3</Text>
+          <Text style={styles.ticketText4}>
+            D-{dayDiff === 0 ? 'day' : -dayDiff}
+          </Text>
         </View>
       </View>
       <View style={{height: 15}} />
@@ -71,7 +108,7 @@ function HomeScreen() {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Icon name={'wb-sunny'} size={26} color={'#BEC4CA'} />
             <Text style={{fontSize: 14, fontWeight: '600', color: '#BEC4CA'}}>
-              {' 10%'}
+              {' N%'}
             </Text>
           </View>
           <View
@@ -84,25 +121,25 @@ function HomeScreen() {
               justifyContent: 'center',
             }}>
             <Text style={{fontSize: 23, color: 'white', fontWeight: '800'}}>
-              김포
+              {route.params.item.departureAirport === 'GMP' ? '김포' : '제주'}
             </Text>
             <Text style={{fontSize: 14, color: 'white', fontWeight: '800'}}>
-              GMP
+              {route.params.item.departureAirport}
             </Text>
           </View>
           <View style={{flexDirection: 'row'}}>
-            <Text style={styles.temp1}>17:50</Text>
+            <Text style={styles.temp1}>{route.params.item.departureTime}</Text>
             <Text style={styles.temp2}> → </Text>
-            <Text style={styles.temp3}>18:30</Text>
+            <Text style={styles.temp3}>NN:NN</Text>
           </View>
           <Icon name={'mood-bad'} size={26} color={'white'} />
           <Text style={{fontSize: 12, fontWeight: '600', color: 'white'}}>
-            공항 매우 혼잡
+            공항 NN NN
           </Text>
         </View>
         <View style={styles.mainContainerBox2}>
           <Text style={{fontSize: 16, fontWeight: '800', color: '#BEC4CA'}}>
-            1시간 10분
+            N시간 N분
           </Text>
           <Text style={{fontSize: 40, fontWeight: 'bold', color: 'white'}}>
             →
@@ -112,7 +149,7 @@ function HomeScreen() {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Icon name={'wb-cloudy'} size={26} color={'#BEC4CA'} />
             <Text style={{fontSize: 14, fontWeight: '600', color: '#BEC4CA'}}>
-              {' 80%'}
+              {' N%'}
             </Text>
           </View>
           <View
@@ -125,20 +162,20 @@ function HomeScreen() {
               justifyContent: 'center',
             }}>
             <Text style={{fontSize: 23, color: 'white', fontWeight: '800'}}>
-              제주
+              {route.params.item.arrivalAirport === 'GMP' ? '김포' : '제주'}
             </Text>
             <Text style={{fontSize: 14, color: 'white', fontWeight: '800'}}>
-              CJU
+              {route.params.item.arrivalAirport}
             </Text>
           </View>
           <View style={{flexDirection: 'row'}}>
-            <Text style={styles.temp1}>19:00</Text>
+            <Text style={styles.temp1}>{route.params.item.arrivalTime}</Text>
             <Text style={styles.temp2}> → </Text>
-            <Text style={styles.temp3}>19:40</Text>
+            <Text style={styles.temp3}>NN:NN</Text>
           </View>
           <Icon name={'mood'} size={26} color={'white'} />
           <Text style={{fontSize: 12, fontWeight: '600', color: 'white'}}>
-            공항 매우 원활
+            공항 NN NN
           </Text>
         </View>
       </View>
@@ -153,7 +190,7 @@ function HomeScreen() {
               textAlign: 'center',
               marginTop: 6,
             }}>
-            탑승 대기중
+            NN NNN
           </Text>
           <Text
             style={{
@@ -164,7 +201,7 @@ function HomeScreen() {
               marginRight: 10,
               marginBottom: 4,
             }}>
-            GATE1
+            GATE%
           </Text>
           <View
             style={{
@@ -177,14 +214,14 @@ function HomeScreen() {
                 <Text style={styles.littleText}>공항</Text>
                 <Text style={styles.littleText}>도착</Text>
               </View>
-              <Text style={styles.littleText1}>16:50</Text>
+              <Text style={styles.littleText1}>{time}</Text>
             </View>
             <View style={styles.subTimeContainer2}>
               <Text style={{fontSize: 10, fontWeight: '600', color: '#9CE6FC'}}>
                 예상 소요시간
               </Text>
               <Text style={{fontSize: 21, fontWeight: '800', color: '#9CE6FC'}}>
-                50분
+                NN분
               </Text>
             </View>
             <View style={styles.subTimeContainer3}>
@@ -192,14 +229,14 @@ function HomeScreen() {
                 <Text style={styles.littleText}>면세지역</Text>
                 <Text style={styles.littleText}>도착</Text>
               </View>
-              <Text style={styles.littleText1}>17:40</Text>
+              <Text style={styles.littleText1}>NN:NN</Text>
             </View>
             <View style={styles.subTimeContainer4}>
               <Text style={{fontSize: 10, fontWeight: '600', color: 'white'}}>
                 예상 여유시간
               </Text>
               <Text style={{fontSize: 21, fontWeight: '800', color: 'white'}}>
-                30분
+                NN분
               </Text>
             </View>
             <View style={styles.subTimeContainer5}>
@@ -207,13 +244,17 @@ function HomeScreen() {
                 <Text style={styles.littleText}>탑승</Text>
                 <Text style={styles.littleText}>시작</Text>
               </View>
-              <Text style={styles.littleText1}>18:10</Text>
+              <Text style={styles.littleText1}>NN:NN</Text>
             </View>
           </View>
         </View>
       </TouchableOpacity>
       <View style={{height: 12}} />
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => {
+          navigation.navigate('Parking', {item: route.params.item});
+        }}>
         <View style={styles.parkingContainer}>
           <View style={styles.subParkingContainer1}>
             <Text style={{fontSize: 20, fontWeight: '800', color: 'white'}}>
@@ -223,11 +264,11 @@ function HomeScreen() {
           <View style={styles.subParkingContainer2}>
             <View style={styles.text4}>
               <Text style={styles.text2}>{'잔여  '}</Text>
-              <Text style={styles.text3}>409</Text>
+              <Text style={styles.text3}>NNN</Text>
               <Text style={styles.text2}>{' 대'}</Text>
             </View>
             <Text style={{fontSize: 13, fontWeight: '500', color: '#BEC4CA'}}>
-              전체 1170대
+              전체 NNNN대
             </Text>
           </View>
         </View>

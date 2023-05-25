@@ -1,12 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import {StyleSheet, View, FlatList, Alert} from 'react-native';
 import FloatingButton from '../components/selectscreen/FloatingButton';
 import ListItem from '../components/selectscreen/ListItem';
 import {useNavigation} from '@react-navigation/native';
@@ -50,9 +43,7 @@ function SelectScreen() {
         }
         five={item.flight}
         onPress1={() => {
-          navigation.reset({
-            routes: [{name: 'Home', item}],
-          });
+          navigation.navigate('Home', {item});
         }}
         onPress2={() => {
           Alert.alert(

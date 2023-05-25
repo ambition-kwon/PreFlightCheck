@@ -53,6 +53,7 @@ function LoginScreen({route}) {
             autoComplete={'off'}
             keyboardType={'default'}
             secureTextEntry={true}
+            autoFill={false}
           />
           {change ? (
             <CustomInput
@@ -62,6 +63,8 @@ function LoginScreen({route}) {
               autoComplete={'off'}
               keyboardType={'default'}
               secureTextEntry={true}
+              autoFill={false}
+              료
             />
           ) : null}
           {!change ? (
