@@ -1,11 +1,82 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {auth} from '../lib/firebase';
 import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
 function HomeScreen({route}) {
+  useEffect(() => {
+    if (route.params.item.departureAirport === 'GMP') {
+      axios
+        .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
+          params: {
+            serviceKey:
+              'NW7YpC64M/sTdToz8CPqPWQaiGok3fI6rHkjyJ2fLiStirvwtsWCD5nroHLVZBt0Tq0yWsXX0sBjMeZBM4dl5Q==',
+            schAirportCode: 'GMP',
+          },
+        })
+        .then(response => {
+          const test = response.data.response.body.items.item;
+          setGMPParking(prevState => {
+            const updatedParking = [...prevState];
+            for (let i = 0; i < 5; i++) {
+              updatedParking[i] = {
+                full: test[i].parkingFullSpace,
+                stay: test[i].parkingIstay,
+              };
+            }
+            return updatedParking;
+          });
+          console.log('김포공항 주차 데이터를 정상적으로 받아왔습니다');
+        })
+        .catch(error => {
+          // 요청이 실패한 경우
+          console.error(error);
+        });
+    } else {
+      axios
+        .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
+          params: {
+            serviceKey:
+              'NW7YpC64M/sTdToz8CPqPWQaiGok3fI6rHkjyJ2fLiStirvwtsWCD5nroHLVZBt0Tq0yWsXX0sBjMeZBM4dl5Q==',
+            schAirportCode: 'CJU',
+          },
+        })
+        .then(response => {
+          const test = response.data.response.body.items.item;
+          setCJUParking(prevState => {
+            const updatedParking = [...prevState];
+            for (let i = 0; i < 3; i++) {
+              updatedParking[i] = {
+                full: test[i].parkingFullSpace,
+                stay: test[i].parkingIstay,
+              };
+            }
+            return updatedParking;
+          });
+          console.log('제주공항 주차 데이터를 정상적으로 받아왔습니다');
+        })
+        .catch(error => {
+          // 요청이 실패한 경우
+          console.error(error);
+        });
+    }
+  }, []);
+  const [GMPParking, setGMPParking] = useState([
+    {full: '', stay: ''},
+    {full: '', stay: ''},
+    {full: '', stay: ''},
+    {full: '', stay: ''},
+    {full: '', stay: ''},
+  ]);
+  const [CJUParking, setCJUParking] = useState([
+    {full: '', stay: ''},
+    {full: '', stay: ''},
+    {full: '', stay: ''},
+  ]);
+  const proxyServer = 'http://localhost:3000/api';
   const navigation = useNavigation();
   const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
   const to = new Date();
@@ -253,7 +324,11 @@ function HomeScreen({route}) {
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => {
-          navigation.navigate('Parking', {item: route.params.item});
+          navigation.navigate('Parking', {
+            item: route.params.item,
+            GMPParking: GMPParking,
+            CJUParking: CJUParking,
+          });
         }}>
         <View style={styles.parkingContainer}>
           <View style={styles.subParkingContainer1}>
@@ -264,12 +339,48 @@ function HomeScreen({route}) {
           <View style={styles.subParkingContainer2}>
             <View style={styles.text4}>
               <Text style={styles.text2}>{'잔여  '}</Text>
-              <Text style={styles.text3}>NNN</Text>
+              {route.params.item.departureAirport === 'GMP' ? (
+                <Text style={styles.text3}>
+                  {GMPParking[0].full +
+                    GMPParking[1].full +
+                    GMPParking[2].full +
+                    GMPParking[3].full +
+                    GMPParking[4].full -
+                    GMPParking[0].stay -
+                    GMPParking[1].stay -
+                    GMPParking[2].stay -
+                    GMPParking[3].stay -
+                    GMPParking[4].stay}
+                </Text>
+              ) : (
+                <Text style={styles.text3}>
+                  {CJUParking[0].full +
+                    CJUParking[1].full +
+                    CJUParking[2].full -
+                    CJUParking[0].stay -
+                    CJUParking[1].stay -
+                    CJUParking[2].stay}
+                </Text>
+              )}
               <Text style={styles.text2}>{' 대'}</Text>
             </View>
-            <Text style={{fontSize: 13, fontWeight: '500', color: '#BEC4CA'}}>
-              전체 NNNN대
-            </Text>
+            {route.params.item.departureAirport === 'GMP' ? (
+              <Text style={{fontSize: 13, fontWeight: '500', color: '#BEC4CA'}}>
+                {`전체 ${
+                  GMPParking[0].full +
+                  GMPParking[1].full +
+                  GMPParking[2].full +
+                  GMPParking[3].full +
+                  GMPParking[4].full
+                }대`}
+              </Text>
+            ) : (
+              <Text style={{fontSize: 13, fontWeight: '500', color: '#BEC4CA'}}>
+                {`전체 ${
+                  CJUParking[0].full + CJUParking[1].full + CJUParking[1].full
+                }대`}
+              </Text>
+            )}
           </View>
         </View>
       </TouchableOpacity>
