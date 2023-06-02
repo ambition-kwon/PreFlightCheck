@@ -2,8 +2,10 @@ import React, {useState} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import ParkListItem from '../components/parkingscreen/ParkListItem';
 import axios from 'axios';
+import {useNavigation} from '@react-navigation/native';
 
 function ParkingScreen({route}) {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={{height: 30}} />
@@ -78,6 +80,13 @@ function ParkingScreen({route}) {
           />
         </>
       )}
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => {
+          navigation.navigate('Test');
+        }}>
+        <Text style={styles.text1}>주차 요금 계산기</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -88,6 +97,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#020812',
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  text1: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 

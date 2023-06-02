@@ -9,6 +9,7 @@ import AddCompleteScreen from './AddCompleteScreen';
 import MyPageScreen from './MyPageScreen';
 import ParkingScreen from './ParkingScreen';
 import CalendarScreen from './CalendarScreen';
+import ParkingFee from './ParkingFee';
 
 const stack = createNativeStackNavigator();
 
@@ -22,6 +23,15 @@ function RootStack() {
         name={'Login'}
         component={LoginScreen}
         options={{headerShown: false}}
+      />
+      <stack.Screen
+        name={'ParkingFee'}
+        component={ParkingFee}
+        options={{
+          headerTitle: '주차요금계산',
+          headerStyle: {backgroundColor: '#020812'},
+          headerTitleStyle: {color: 'white'},
+        }}
       />
       <stack.Screen
         name={'Parking'}

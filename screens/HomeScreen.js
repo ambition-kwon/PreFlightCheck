@@ -6,14 +6,14 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {auth} from '../lib/firebase';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
+import Config from 'react-native-config';
 function HomeScreen({route}) {
   useEffect(() => {
     if (route.params.item.departureAirport === 'GMP') {
       axios
         .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
           params: {
-            serviceKey:
-              'NW7YpC64M/sTdToz8CPqPWQaiGok3fI6rHkjyJ2fLiStirvwtsWCD5nroHLVZBt0Tq0yWsXX0sBjMeZBM4dl5Q==',
+            serviceKey: Config.API_KEY,
             schAirportCode: 'GMP',
           },
         })
@@ -39,8 +39,7 @@ function HomeScreen({route}) {
       axios
         .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
           params: {
-            serviceKey:
-              'NW7YpC64M/sTdToz8CPqPWQaiGok3fI6rHkjyJ2fLiStirvwtsWCD5nroHLVZBt0Tq0yWsXX0sBjMeZBM4dl5Q==',
+            serviceKey: Config.API_KEY,
             schAirportCode: 'CJU',
           },
         })
