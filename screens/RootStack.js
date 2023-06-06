@@ -10,6 +10,7 @@ import MyPageScreen from './MyPageScreen';
 import ParkingScreen from './ParkingScreen';
 import CalendarScreen from './CalendarScreen';
 import ParkingFee from './ParkingFee';
+import NoticeScreen from './NoticeScreen';
 
 const stack = createNativeStackNavigator();
 
@@ -25,6 +26,24 @@ function RootStack() {
         options={{headerShown: false}}
       />
       <stack.Screen
+        name={'MyPage'}
+        component={MyPageScreen}
+        options={{
+          headerTitle: '마이 페이지',
+          headerStyle: {backgroundColor: '#020812'},
+          headerTitleStyle: {color: 'white'},
+        }}
+      />
+      <stack.Screen
+        name={'notice'}
+        component={NoticeScreen}
+        options={{
+          headerTitle: '오픈소스 라이선스',
+          headerStyle: {backgroundColor: '#020812'},
+          headerTitleStyle: {color: 'white'},
+        }}
+      />
+      <stack.Screen
         name={'ParkingFee'}
         component={ParkingFee}
         options={{
@@ -38,15 +57,6 @@ function RootStack() {
         component={ParkingScreen}
         options={{
           headerTitle: '주차 정보',
-          headerStyle: {backgroundColor: '#020812'},
-          headerTitleStyle: {color: 'white'},
-        }}
-      />
-      <stack.Screen
-        name={'MyPage'}
-        component={MyPageScreen}
-        options={{
-          headerTitle: '마이 페이지',
           headerStyle: {backgroundColor: '#020812'},
           headerTitleStyle: {color: 'white'},
         }}

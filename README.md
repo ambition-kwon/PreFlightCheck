@@ -15,6 +15,7 @@
 - react-native-calendars
 - react-native-modal-datetime-picker 
 - @react-native-community/datetimepicker
+- react-native-config
 
 ### 프로그램
 - Watchman

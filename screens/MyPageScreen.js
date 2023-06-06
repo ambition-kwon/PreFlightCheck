@@ -53,6 +53,13 @@ function MyPageScreen() {
         }}>
         <Text style={styles.logout}>로그아웃</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => {
+          navigation.navigate('notice');
+        }}>
+        <Text style={styles.text5}>오픈소스 라이선스</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -126,6 +133,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     fontWeight: '600',
+  },
+  text5: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: 'gray',
+    position: 'relative',
+    top: 60,
   },
 });
 

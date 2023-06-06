@@ -45,7 +45,7 @@ function ParkingScreen({route}) {
           />
           <ParkListItem
             name={'김포공항 화물청사 주자창'}
-            address={'서울특별시 강서구 하늘길 77 변경하자'}
+            address={'서울특별시 강서구 하늘길 170-1 AAS정비동'}
             full={route.params.GMPParking[4].full}
             possible={
               route.params.GMPParking[4].full - route.params.GMPParking[4].stay
@@ -55,16 +55,16 @@ function ParkingScreen({route}) {
       ) : (
         <>
           <ParkListItem
-            name={'제주공항 주차장'}
-            address={'서울특별시 강서구 제주로 77 지하주차장 입구'}
+            name={'제주공항 P1 주차장'}
+            address={'제주특별자치도 제주시 도두이동 44'}
             full={route.params.CJUParking[0].full}
             possible={
               route.params.CJUParking[0].full - route.params.CJUParking[0].stay
             }
           />
           <ParkListItem
-            name={'제주공항 장기 주차장'}
-            address={'서울특별시 강서구 제주로 77 제주입구'}
+            name={'제주공항 P2 장기주차장'}
+            address={'제주특별자치도 제주시 도두이동 34'}
             full={route.params.CJUParking[1].full}
             possible={
               route.params.CJUParking[1].full - route.params.CJUParking[1].stay
@@ -72,7 +72,7 @@ function ParkingScreen({route}) {
           />
           <ParkListItem
             name={'제주공항 화물주차장'}
-            address={'서울특별시 강서구 제주로 77 제주입구'}
+            address={'제주특별자치도 제주시 용담2동 731-3'}
             full={route.params.CJUParking[2].full}
             possible={
               route.params.CJUParking[2].full - route.params.CJUParking[2].stay
@@ -83,8 +83,9 @@ function ParkingScreen({route}) {
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => {
-          navigation.navigate('Test');
-        }}>
+          navigation.navigate('ParkingFee');
+        }}
+        style={styles.button}>
         <Text style={styles.text1}>주차 요금 계산기</Text>
       </TouchableOpacity>
     </View>
@@ -100,8 +101,17 @@ const styles = StyleSheet.create({
   },
   text1: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
+  },
+  button: {
+    width: 130,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#273244',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 40,
   },
 });
 
