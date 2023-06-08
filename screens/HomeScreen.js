@@ -80,61 +80,61 @@ function HomeScreen({route}) {
           console.error(error);
         });
     }
-    if (Data.departureAirport === 'GMP') {
-      setLoading(true);
-      axios
-        .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
-          params: {
-            serviceKey: Config.API_KEY,
-            schAirportCode: 'GMP',
-          },
-        })
-        .then(response => {
-          const test = response.data.response.body.items.item;
-          setGMPParking(prevState => {
-            const updatedParking = [...prevState];
-            for (let i = 0; i < 5; i++) {
-              updatedParking[i] = {
-                full: test[i].parkingFullSpace,
-                stay: test[i].parkingIstay,
-              };
-            }
-            return updatedParking;
-          });
-          setLoading(false);
-        })
-        .catch(error => {
-          console.error(error);
-          setLoading(false);
-        });
-    } else {
-      setLoading(true);
-      axios
-        .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
-          params: {
-            serviceKey: Config.API_KEY,
-            schAirportCode: 'CJU',
-          },
-        })
-        .then(response => {
-          const test = response.data.response.body.items.item;
-          setCJUParking(prevState => {
-            const updatedParking = [...prevState];
-            for (let i = 0; i < 3; i++) {
-              updatedParking[i] = {
-                full: test[i].parkingFullSpace,
-                stay: test[i].parkingIstay,
-              };
-            }
-            return updatedParking;
-          });
-          setLoading(false);
-        })
-        .catch(error => {
-          console.error(error);
-          setLoading(false);
-        });
-    }
+    // if (Data.departureAirport === 'GMP') {
+    //   setLoading(true);
+    //   axios
+    //     .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
+    //       params: {
+    //         serviceKey: Config.API_KEY,
+    //         schAirportCode: 'GMP',
+    //       },
+    //     })
+    //     .then(response => {
+    //       const test = response.data.response.body.items.item;
+    //       setGMPParking(prevState => {
+    //         const updatedParking = [...prevState];
+    //         for (let i = 0; i < 5; i++) {
+    //           updatedParking[i] = {
+    //             full: test[i].parkingFullSpace,
+    //             stay: test[i].parkingIstay,
+    //           };
+    //         }
+    //         return updatedParking;
+    //       });
+    //       setLoading(false);
+    //     })
+    //     .catch(error => {
+    //       console.error(error);
+    //       setLoading(false);
+    //     });
+    // } else {
+    //   setLoading(true);
+    //   axios
+    //     .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
+    //       params: {
+    //         serviceKey: Config.API_KEY,
+    //         schAirportCode: 'CJU',
+    //       },
+    //     })
+    //     .then(response => {
+    //       const test = response.data.response.body.items.item;
+    //       setCJUParking(prevState => {
+    //         const updatedParking = [...prevState];
+    //         for (let i = 0; i < 3; i++) {
+    //           updatedParking[i] = {
+    //             full: test[i].parkingFullSpace,
+    //             stay: test[i].parkingIstay,
+    //           };
+    //         }
+    //         return updatedParking;
+    //       });
+    //       setLoading(false);
+    //     })
+    //     .catch(error => {
+    //       console.error(error);
+    //       setLoading(false);
+    //     });
+    // }
   }, []);
   const [loading, setLoading] = useState();
   const [changeDT, setChangeDT] = useState('init');

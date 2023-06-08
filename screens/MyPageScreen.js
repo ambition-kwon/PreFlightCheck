@@ -1,11 +1,10 @@
 import React, {useContext} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {auth} from '../lib/firebase';
 import DataContext from '../contexts/DataContext';
 import {logout} from '../lib/login';
 import {useNavigation} from '@react-navigation/native';
-import LoadingScreen from './LoadingScreen';
 
 function MyPageScreen() {
   const navigation = useNavigation();
@@ -50,7 +49,25 @@ function MyPageScreen() {
         activeOpacity={0.7}
         style={styles.button}
         onPress={() => {
-          logout(navigation);
+          Alert.alert(
+            '알림',
+            '정말 로그아웃 하시겠습니까?',
+            [
+              {
+                text: '취소',
+                style: 'cancel',
+                onPress: () => {},
+              },
+              {
+                text: '로그아웃',
+                style: 'destructive',
+                onPress: () => {
+                  logout(navigation);
+                },
+              },
+            ],
+            {cancelable: true},
+          );
         }}>
         <Text style={styles.logout}>로그아웃</Text>
       </TouchableOpacity>
