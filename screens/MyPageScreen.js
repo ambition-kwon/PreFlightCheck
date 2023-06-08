@@ -5,6 +5,7 @@ import {auth} from '../lib/firebase';
 import DataContext from '../contexts/DataContext';
 import {logout} from '../lib/login';
 import {useNavigation} from '@react-navigation/native';
+import LoadingScreen from './LoadingScreen';
 
 function MyPageScreen() {
   const navigation = useNavigation();

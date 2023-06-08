@@ -229,7 +229,6 @@ function AddScreen({route}) {
                 departureTime,
                 arrivalTime,
               );
-              // onLoad();
               navigation.reset({routes: [{name: 'Select'}]});
             }
           }}>

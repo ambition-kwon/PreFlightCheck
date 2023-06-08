@@ -7,6 +7,7 @@ import {auth} from '../lib/firebase';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import Config from 'react-native-config';
+import LoadingScreen from './LoadingScreen';
 function HomeScreen({route}) {
   useEffect(() => {
     if (Data.startDate === today) {
@@ -79,8 +80,8 @@ function HomeScreen({route}) {
           console.error(error);
         });
     }
-    /////////////////////////////////////////////////////////////////////////
     if (Data.departureAirport === 'GMP') {
+      setLoading(true);
       axios
         .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
           params: {
@@ -100,11 +101,14 @@ function HomeScreen({route}) {
             }
             return updatedParking;
           });
+          setLoading(false);
         })
         .catch(error => {
           console.error(error);
+          setLoading(false);
         });
     } else {
+      setLoading(true);
       axios
         .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
           params: {
@@ -124,12 +128,15 @@ function HomeScreen({route}) {
             }
             return updatedParking;
           });
+          setLoading(false);
         })
         .catch(error => {
           console.error(error);
+          setLoading(false);
         });
     }
   }, []);
+  const [loading, setLoading] = useState();
   const [changeDT, setChangeDT] = useState('init');
   const [changeAT, setChangeAT] = useState('init');
   const [statusEng, setStatusEng] = useState('init');
@@ -496,6 +503,7 @@ function HomeScreen({route}) {
         onCancel={onCancel1}
         locale="ko"
       />
+      {loading ? <LoadingScreen /> : null}
     </SafeAreaView>
   );
 }

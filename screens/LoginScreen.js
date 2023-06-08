@@ -1,4 +1,3 @@
-//TODO: Auto Login 구현
 import React, {useState, useContext} from 'react';
 import {
   Text,
@@ -18,6 +17,7 @@ import RegisterCustomButton from '../components/loginscreen/RegisterCustomButton
 import {useNavigation} from '@react-navigation/native';
 import {loginAnonymous, loginEmail, registerEmail} from '../lib/login';
 import LoginContext from '../contexts/LoginContext';
+import LoadingScreen from './LoadingScreen';
 
 function LoginScreen({route}) {
   const navigation = useNavigation();
@@ -26,6 +26,7 @@ function LoginScreen({route}) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const {onCreate} = useContext(LoginContext);
+  const [loading, setLoading] = useState();
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <KeyboardAvoidingView
@@ -71,13 +72,19 @@ function LoginScreen({route}) {
             <>
               <TouchableOpacity
                 onPress={() => {
-                  loginAnonymous(navigation);
+                  setLoading(true);
+                  loginAnonymous(navigation).then(() => {
+                    setLoading(false);
+                  });
                 }}>
                 <Text style={styles.subText}>아니요, 계정없이 이용할래요</Text>
               </TouchableOpacity>
               <LoginCustomButton
                 onPress={() => {
-                  loginEmail(email, password, onCreate, navigation);
+                  setLoading(true);
+                  loginEmail(email, password, onCreate, navigation).then(() => {
+                    setLoading(false);
+                  });
                 }}
                 title={'로그인'}
               />
@@ -91,7 +98,12 @@ function LoginScreen({route}) {
               <LoginCustomButton
                 onPress={() => {
                   if (password === confirmPassword) {
-                    registerEmail(email, password, onCreate, navigation);
+                    setLoading(true);
+                    registerEmail(email, password, onCreate, navigation).then(
+                      () => {
+                        setLoading(false);
+                      },
+                    );
                   } else {
                     Alert.alert('알림', '비밀번호가 일치하지 않습니다', [
                       {text: '확인'},
@@ -106,6 +118,7 @@ function LoginScreen({route}) {
               />
             </>
           )}
+          {loading ? <LoadingScreen /> : null}
         </SafeAreaView>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

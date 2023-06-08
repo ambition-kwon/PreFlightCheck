@@ -1,10 +1,11 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View, FlatList, Alert} from 'react-native';
 import FloatingButton from '../components/selectscreen/FloatingButton';
 import ListItem from '../components/selectscreen/ListItem';
 import {useNavigation} from '@react-navigation/native';
 import DataContext from '../contexts/DataContext';
 import {deleteDocument} from '../lib/post';
+import LoadingScreen from './LoadingScreen';
 function SelectScreen() {
   const navigation = useNavigation();
   const {Data, onLoad} = useContext(DataContext);
@@ -17,9 +18,13 @@ function SelectScreen() {
   const month = String(to.getMonth() + 1).padStart(2, '0');
   const day = String(to.getDate()).padStart(2, '0');
   const today = `${year}-${month}-${day}`;
+  const [loading, setLoading] = useState();
 
   useEffect(() => {
-    onLoad();
+    setLoading(true);
+    onLoad().then(() => {
+      setLoading(false);
+    });
   }, []);
   const renderItem = ({item}) => {
     const end = new Date(today) > new Date(item.startDate);
@@ -69,8 +74,12 @@ function SelectScreen() {
                 text: '삭제',
                 style: 'destructive',
                 onPress: () => {
-                  deleteDocument('ticket', item.documentID);
-                  onLoad();
+                  setLoading(true);
+                  deleteDocument('ticket', item.documentID).then(() => {
+                    onLoad().then(() => {
+                      setLoading(false);
+                    });
+                  });
                 },
               },
             ],
@@ -89,6 +98,7 @@ function SelectScreen() {
           navigation.navigate('Calendar');
         }}
       />
+      {loading ? <LoadingScreen /> : null}
     </View>
   );
 }
