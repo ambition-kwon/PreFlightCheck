@@ -43,7 +43,17 @@ function SelectScreen() {
         }
         five={item.flight}
         onPress1={() => {
-          navigation.navigate('Home', {item});
+          navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: 'Home',
+                params: {
+                  item: item,
+                },
+              },
+            ],
+          });
         }}
         onPress2={() => {
           Alert.alert(

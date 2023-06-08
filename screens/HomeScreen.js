@@ -9,7 +9,78 @@ import axios from 'axios';
 import Config from 'react-native-config';
 function HomeScreen({route}) {
   useEffect(() => {
-    if (route.params.item.departureAirport === 'GMP') {
+    if (Data.startDate === today) {
+      axios
+        .get(
+          `${proxyServer}/service/rest/FlightStatusList/getFlightStatusList`,
+          {
+            params: {
+              schLineType: 'D',
+              schIOType: 'O',
+              schAirCode: Data.departureAirport,
+              serviceKey: Config.API_KEY,
+              schStTime: Data.departureTime.replace(':', ''),
+              schEdTime: Data.departureTime.replace(':', ''),
+            },
+          },
+        )
+        .then(response => {
+          const test = response.data.response.body.items.item;
+          if (Array.isArray(test)) {
+            let i = 0;
+            for (i; i < test.length; i++) {
+              if (test[i].airFln == Data.flight) {
+                break;
+              }
+            }
+            setChangeDT(test[i].etd);
+            setGate(test[i].gate);
+            setStatusEng(test[i].rmkEng);
+            setStatusKor(test[i].rmkKor);
+          } else {
+            setChangeDT(test.etd);
+            setGate(test.gate);
+            setStatusEng(test.rmkEng);
+            setStatusKor(test.rmkKor);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+      axios
+        .get(
+          `${proxyServer}/service/rest/FlightStatusList/getFlightStatusList`,
+          {
+            params: {
+              schLineType: 'D',
+              schIOType: 'I',
+              schAirCode: Data.arrivalAirport,
+              serviceKey: Config.API_KEY,
+              schStTime: Data.arrivalTime.replace(':', ''),
+              schEdTime: Data.arrivalTime.replace(':', ''),
+            },
+          },
+        )
+        .then(response => {
+          const test = response.data.response.body.items.item;
+          if (Array.isArray(test)) {
+            let i = 0;
+            for (i; i < test.length; i++) {
+              if (test[i].airFln == Data.flight) {
+                break;
+              }
+            }
+            setChangeAT(test[i].etd);
+          } else {
+            setChangeAT(test.etd);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+    /////////////////////////////////////////////////////////////////////////
+    if (Data.departureAirport === 'GMP') {
       axios
         .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
           params: {
@@ -29,10 +100,8 @@ function HomeScreen({route}) {
             }
             return updatedParking;
           });
-          console.log('김포공항 주차 데이터를 정상적으로 받아왔습니다');
         })
         .catch(error => {
-          // 요청이 실패한 경우
           console.error(error);
         });
     } else {
@@ -55,14 +124,17 @@ function HomeScreen({route}) {
             }
             return updatedParking;
           });
-          console.log('제주공항 주차 데이터를 정상적으로 받아왔습니다');
         })
         .catch(error => {
-          // 요청이 실패한 경우
           console.error(error);
         });
     }
   }, []);
+  const [changeDT, setChangeDT] = useState('init');
+  const [changeAT, setChangeAT] = useState('init');
+  const [statusEng, setStatusEng] = useState('init');
+  const [statusKor, setStatusKor] = useState('init');
+  const [gate, setGate] = useState('init');
   const [GMPParking, setGMPParking] = useState([
     {full: '', stay: ''},
     {full: '', stay: ''},
@@ -75,6 +147,13 @@ function HomeScreen({route}) {
     {full: '', stay: ''},
     {full: '', stay: ''},
   ]);
+  const Data = route.params ? route.params.item : null;
+  const newData = {
+    ...Data,
+    startDate: Data.startDate.replace(/-/g, ''),
+    departureTime: Data.departureTime.replace(':', ''),
+    arrivalTime: Data.arrivalTime.replace(':', ''),
+  };
   const proxyServer = 'http://localhost:3000/api';
   const navigation = useNavigation();
   const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
@@ -84,9 +163,8 @@ function HomeScreen({route}) {
   const day = String(to.getDate()).padStart(2, '0');
   const today = `${year}-${month}-${day}`;
   const timeDiff =
-    new Date(today).getTime() - new Date(route.params.item.startDate).getTime();
+    new Date(today).getTime() - new Date(Data.startDate).getTime();
   const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
   const [time, setTime] = useState('00:00');
   const [visible1, setVisible1] = useState(false);
   const onPressTime1 = () => {
@@ -107,6 +185,24 @@ function HomeScreen({route}) {
   const onCancel1 = () => {
     setVisible1(false);
   };
+  const changeDTString = String(changeDT);
+  const changeATString = String(changeAT);
+  const timeDiff2 = (time1, time2) => {
+    const hour1 = Math.floor(time1 / 100);
+    const minute1 = time1 % 100;
+    const hour2 = Math.floor(time2 / 100);
+    const minute2 = time2 % 100;
+    let hourDiff = hour2 - hour1;
+    let minuteDiff = minute2 - minute1;
+    if (hourDiff < 0) {
+      hourDiff += 24;
+    }
+    if (minuteDiff < 0) {
+      minuteDiff += 60;
+      hourDiff--;
+    }
+    return `${hourDiff}시간 ${minuteDiff}분`;
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.profileContainer}>
@@ -122,7 +218,7 @@ function HomeScreen({route}) {
             style={styles.myBox}
             activeOpacity={0.7}
             onPress={() => {
-              navigation.navigate('Select');
+              navigation.reset({routes: [{name: 'Select'}]});
             }}>
             <Text style={styles.my}>내 일정</Text>
           </TouchableOpacity>
@@ -140,12 +236,11 @@ function HomeScreen({route}) {
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => {
-          navigation.navigate('Select');
+          navigation.reset({routes: [{name: 'Select'}]});
         }}>
         <View style={styles.schedule}>
           <Text style={styles.scheduleText}>
-            {route.params.item.startDate}(
-            {daysOfWeek[new Date(route.params.item.startDate).getDay()]})
+            {Data.startDate}({daysOfWeek[new Date(Data.startDate).getDay()]})
           </Text>
         </View>
       </TouchableOpacity>
@@ -158,11 +253,9 @@ function HomeScreen({route}) {
             <Text style={styles.ticketText1}>항공편명</Text>
           </View>
           <View style={styles.ticketSubBox2}>
-            <Text style={styles.ticketText2}>
-              {route.params.item.bookingNumber}
-            </Text>
-            <Text style={styles.ticketText2}>{route.params.item.airline}</Text>
-            <Text style={styles.ticketText2}>{route.params.item.flight}</Text>
+            <Text style={styles.ticketText2}>{Data.bookingNumber}</Text>
+            <Text style={styles.ticketText2}>{Data.airline}</Text>
+            <Text style={styles.ticketText2}>{Data.flight}</Text>
           </View>
         </View>
         <View style={styles.ticketBox2}>
@@ -191,16 +284,20 @@ function HomeScreen({route}) {
               justifyContent: 'center',
             }}>
             <Text style={{fontSize: 23, color: 'white', fontWeight: '800'}}>
-              {route.params.item.departureAirport === 'GMP' ? '김포' : '제주'}
+              {Data.departureAirport === 'GMP' ? '김포' : '제주'}
             </Text>
             <Text style={{fontSize: 14, color: 'white', fontWeight: '800'}}>
-              {route.params.item.departureAirport}
+              {Data.departureAirport}
             </Text>
           </View>
           <View style={{flexDirection: 'row'}}>
-            <Text style={styles.temp1}>{route.params.item.departureTime}</Text>
+            <Text style={styles.temp1}>{Data.departureTime}</Text>
             <Text style={styles.temp2}> → </Text>
-            <Text style={styles.temp3}>NN:NN</Text>
+            <Text style={styles.temp3}>
+              {changeDT !== 'init'
+                ? `${changeDTString.slice(0, 2)}:${changeDTString.slice(-2)}`
+                : Data.departureTime}
+            </Text>
           </View>
           <Icon name={'mood-bad'} size={26} color={'white'} />
           <Text style={{fontSize: 12, fontWeight: '600', color: 'white'}}>
@@ -209,7 +306,12 @@ function HomeScreen({route}) {
         </View>
         <View style={styles.mainContainerBox2}>
           <Text style={{fontSize: 16, fontWeight: '800', color: '#BEC4CA'}}>
-            N시간 N분
+            {changeAT !== 'init' && changeDT !== 'init'
+              ? timeDiff2(changeDT, changeAT)
+              : timeDiff2(
+                  Data.departureTime.replace(':', ''),
+                  Data.arrivalTime.replace(':', ''),
+                )}
           </Text>
           <Text style={{fontSize: 40, fontWeight: 'bold', color: 'white'}}>
             →
@@ -232,16 +334,20 @@ function HomeScreen({route}) {
               justifyContent: 'center',
             }}>
             <Text style={{fontSize: 23, color: 'white', fontWeight: '800'}}>
-              {route.params.item.arrivalAirport === 'GMP' ? '김포' : '제주'}
+              {Data.arrivalAirport === 'GMP' ? '김포' : '제주'}
             </Text>
             <Text style={{fontSize: 14, color: 'white', fontWeight: '800'}}>
-              {route.params.item.arrivalAirport}
+              {Data.arrivalAirport}
             </Text>
           </View>
           <View style={{flexDirection: 'row'}}>
-            <Text style={styles.temp1}>{route.params.item.arrivalTime}</Text>
+            <Text style={styles.temp1}>{Data.arrivalTime}</Text>
             <Text style={styles.temp2}> → </Text>
-            <Text style={styles.temp3}>NN:NN</Text>
+            <Text style={styles.temp3}>
+              {changeAT !== 'init'
+                ? `${changeATString.slice(0, 2)}:${changeATString.slice(-2)}`
+                : Data.arrivalTime}
+            </Text>
           </View>
           <Icon name={'mood'} size={26} color={'white'} />
           <Text style={{fontSize: 12, fontWeight: '600', color: 'white'}}>
@@ -260,7 +366,7 @@ function HomeScreen({route}) {
               textAlign: 'center',
               marginTop: 6,
             }}>
-            NN NNN
+            {statusEng !== 'init' ? `${statusEng}(${statusKor})` : ''}
           </Text>
           <Text
             style={{
@@ -271,7 +377,7 @@ function HomeScreen({route}) {
               marginRight: 10,
               marginBottom: 4,
             }}>
-            GATE%
+            {gate !== 'init' ? `GATE${gate}` : ''}
           </Text>
           <View
             style={{
@@ -324,7 +430,7 @@ function HomeScreen({route}) {
         activeOpacity={0.7}
         onPress={() => {
           navigation.navigate('Parking', {
-            item: route.params.item,
+            item: Data,
             GMPParking: GMPParking,
             CJUParking: CJUParking,
           });
@@ -338,7 +444,7 @@ function HomeScreen({route}) {
           <View style={styles.subParkingContainer2}>
             <View style={styles.text4}>
               <Text style={styles.text2}>{'잔여  '}</Text>
-              {route.params.item.departureAirport === 'GMP' ? (
+              {Data.departureAirport === 'GMP' ? (
                 <Text style={styles.text3}>
                   {GMPParking[0].full +
                     GMPParking[1].full +
@@ -363,7 +469,7 @@ function HomeScreen({route}) {
               )}
               <Text style={styles.text2}>{' 대'}</Text>
             </View>
-            {route.params.item.departureAirport === 'GMP' ? (
+            {Data.departureAirport === 'GMP' ? (
               <Text style={{fontSize: 13, fontWeight: '500', color: '#BEC4CA'}}>
                 {`전체 ${
                   GMPParking[0].full +
