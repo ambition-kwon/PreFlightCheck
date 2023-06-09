@@ -88,69 +88,73 @@ function HomeScreen({route}) {
               }
             }
             setChangeAT(test[i].etd);
+            setStatusEng1(test[i].rmkEng);
+            setStatusKor1(test[i].rmkKor);
           } else {
             setChangeAT(test.etd);
+            setStatusEng1(test.rmkEng);
+            setStatusKor1(test.rmkKor);
           }
         })
         .catch(error => {
           console.error(error);
         });
     }
-    // if (Data.departureAirport === 'GMP') {
-    //   setLoading(true);
-    //   axios
-    //     .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
-    //       params: {
-    //         serviceKey: Config.API_KEY,
-    //         schAirportCode: 'GMP',
-    //       },
-    //     })
-    //     .then(response => {
-    //       const test = response.data.response.body.items.item;
-    //       setGMPParking(prevState => {
-    //         const updatedParking = [...prevState];
-    //         for (let i = 0; i < 5; i++) {
-    //           updatedParking[i] = {
-    //             full: test[i].parkingFullSpace,
-    //             stay: test[i].parkingIstay,
-    //           };
-    //         }
-    //         return updatedParking;
-    //       });
-    //       setLoading(false);
-    //     })
-    //     .catch(error => {
-    //       console.error(error);
-    //       setLoading(false);
-    //     });
-    // } else {
-    //   setLoading(true);
-    //   axios
-    //     .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
-    //       params: {
-    //         serviceKey: Config.API_KEY,
-    //         schAirportCode: 'CJU',
-    //       },
-    //     })
-    //     .then(response => {
-    //       const test = response.data.response.body.items.item;
-    //       setCJUParking(prevState => {
-    //         const updatedParking = [...prevState];
-    //         for (let i = 0; i < 3; i++) {
-    //           updatedParking[i] = {
-    //             full: test[i].parkingFullSpace,
-    //             stay: test[i].parkingIstay,
-    //           };
-    //         }
-    //         return updatedParking;
-    //       });
-    //       setLoading(false);
-    //     })
-    //     .catch(error => {
-    //       console.error(error);
-    //       setLoading(false);
-    //     });
-    // }
+    if (Data.departureAirport === 'GMP') {
+      setLoading(true);
+      axios
+        .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
+          params: {
+            serviceKey: Config.API_KEY,
+            schAirportCode: 'GMP',
+          },
+        })
+        .then(response => {
+          const test = response.data.response.body.items.item;
+          setGMPParking(prevState => {
+            const updatedParking = [...prevState];
+            for (let i = 0; i < 5; i++) {
+              updatedParking[i] = {
+                full: test[i].parkingFullSpace,
+                stay: test[i].parkingIstay,
+              };
+            }
+            return updatedParking;
+          });
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error(error);
+          setLoading(false);
+        });
+    } else {
+      setLoading(true);
+      axios
+        .get(`${proxyServer}/service/rest/AirportParking/airportparkingRT`, {
+          params: {
+            serviceKey: Config.API_KEY,
+            schAirportCode: 'CJU',
+          },
+        })
+        .then(response => {
+          const test = response.data.response.body.items.item;
+          setCJUParking(prevState => {
+            const updatedParking = [...prevState];
+            for (let i = 0; i < 3; i++) {
+              updatedParking[i] = {
+                full: test[i].parkingFullSpace,
+                stay: test[i].parkingIstay,
+              };
+            }
+            return updatedParking;
+          });
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error(error);
+          setLoading(false);
+        });
+    }
   }, []);
   const [delay, setDelay] = useState();
   const [loading, setLoading] = useState();
@@ -158,6 +162,8 @@ function HomeScreen({route}) {
   const [changeAT, setChangeAT] = useState('init');
   const [statusEng, setStatusEng] = useState('init');
   const [statusKor, setStatusKor] = useState('init');
+  const [statusEng1, setStatusEng1] = useState('init');
+  const [statusKor1, setStatusKor1] = useState('init');
   const [gate, setGate] = useState('init');
   const [GMPParking, setGMPParking] = useState([
     {full: '', stay: ''},
@@ -189,7 +195,7 @@ function HomeScreen({route}) {
   const timeDiff =
     new Date(today).getTime() - new Date(Data.startDate).getTime();
   const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-  const [time, setTime] = useState('00:00');
+  const [time, setTime] = useState('05:00');
   const [visible1, setVisible1] = useState(false);
   const onPressTime1 = () => {
     // 시간 클릭 시
@@ -428,7 +434,12 @@ function HomeScreen({route}) {
               textAlign: 'center',
               marginTop: 6,
             }}>
-            {statusEng !== 'init' ? `${statusEng}(${statusKor})` : ''}
+            {statusKor !== 'init' && statusKor !== '출발'
+              ? `${statusEng.trim()}(${statusKor.trim()})`
+              : undefined}
+            {statusKor !== 'init' && statusKor === '출발'
+              ? `${statusEng1.trim()}(${statusKor1.trim()})`
+              : undefined}
           </Text>
           <Text
             style={{

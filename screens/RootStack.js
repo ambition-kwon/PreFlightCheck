@@ -5,7 +5,6 @@ import AddNameScreen from './AddNameScreen';
 import SelectScreen from './SelectScreen';
 import HomeScreen from './HomeScreen';
 import AddScreen from './AddScreen';
-import AddCompleteScreen from './AddCompleteScreen';
 import MyPageScreen from './MyPageScreen';
 import ParkingScreen from './ParkingScreen';
 import CalendarScreen from './CalendarScreen';
@@ -91,11 +90,6 @@ function RootStack() {
       <stack.Screen
         name={'AddName'}
         component={AddNameScreen}
-        options={{headerShown: false}}
-      />
-      <stack.Screen
-        name={'AddComplete'}
-        component={AddCompleteScreen}
         options={{headerShown: false}}
       />
       <stack.Screen
