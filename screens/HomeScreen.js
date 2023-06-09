@@ -10,6 +10,22 @@ import Config from 'react-native-config';
 import LoadingScreen from './LoadingScreen';
 function HomeScreen({route}) {
   useEffect(() => {
+    console.log(JSON.stringify(newData, null, 2));
+    ///////////////////////////////////////////////////////////////
+    axios
+      .post('http://localhost:8080/aprtWaitTime', newData)
+      .then(response => {
+        const test = response.data;
+        const seconds =
+          parseInt(test.sty_TCT_AVG_A) +
+          parseInt(test.sty_TCT_AVG_B) +
+          parseInt(test.sty_TCT_AVG_C);
+        setDelay(Math.ceil(seconds / 60));
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    ///////////////////////////////////////////////////////////////
     if (Data.startDate === today) {
       axios
         .get(
@@ -136,6 +152,7 @@ function HomeScreen({route}) {
     //     });
     // }
   }, []);
+  const [delay, setDelay] = useState();
   const [loading, setLoading] = useState();
   const [changeDT, setChangeDT] = useState('init');
   const [changeAT, setChangeAT] = useState('init');
@@ -210,6 +227,44 @@ function HomeScreen({route}) {
     }
     return `${hourDiff}시간 ${minuteDiff}분`;
   };
+  function addMinutesToTime(timeStr, minutesToAdd) {
+    const [hoursStr, minutesStr] = timeStr.split(':');
+    const hours = parseInt(hoursStr);
+    const minutes = parseInt(minutesStr);
+    const totalMinutes = hours * 60 + minutes + minutesToAdd;
+    const newHours = Math.floor(totalMinutes / 60);
+    const newMinutes = totalMinutes % 60;
+    const newTimeStr = `${newHours.toString().padStart(2, '0')}:${newMinutes
+      .toString()
+      .padStart(2, '0')}`;
+    return newTimeStr;
+  }
+  function subtractMinutesToTime(timeStr, minutesToSubtract) {
+    const [hoursStr, minutesStr] = timeStr.split(':');
+    const hours = parseInt(hoursStr);
+    const minutes = parseInt(minutesStr);
+    const totalMinutes = hours * 60 + minutes - minutesToSubtract;
+    const newHours = Math.floor(totalMinutes / 60);
+    const newMinutes = totalMinutes % 60;
+    const newTimeStr = `${newHours.toString().padStart(2, '0')}:${newMinutes
+      .toString()
+      .padStart(2, '0')}`;
+    return newTimeStr;
+  }
+  function getTimeDifferenceString(timeStr1, timeStr2) {
+    const [hours1Str, minutes1Str] = timeStr1.split(':');
+    const [hours2Str, minutes2Str] = timeStr2.split(':');
+    const hours1 = parseInt(hours1Str);
+    const minutes1 = parseInt(minutes1Str);
+    const hours2 = parseInt(hours2Str);
+    const minutes2 = parseInt(minutes2Str);
+    const totalMinutes1 = hours1 * 60 + minutes1;
+    const totalMinutes2 = hours2 * 60 + minutes2;
+    const diffMinutes = totalMinutes1 - totalMinutes2;
+
+    return diffMinutes;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.profileContainer}>
@@ -404,7 +459,7 @@ function HomeScreen({route}) {
                 예상 소요시간
               </Text>
               <Text style={{fontSize: 21, fontWeight: '800', color: '#9CE6FC'}}>
-                NN분
+                {delay}분
               </Text>
             </View>
             <View style={styles.subTimeContainer3}>
@@ -412,14 +467,20 @@ function HomeScreen({route}) {
                 <Text style={styles.littleText}>면세지역</Text>
                 <Text style={styles.littleText}>도착</Text>
               </View>
-              <Text style={styles.littleText1}>NN:NN</Text>
+              <Text style={styles.littleText1}>
+                {addMinutesToTime(time, delay)}
+              </Text>
             </View>
             <View style={styles.subTimeContainer4}>
               <Text style={{fontSize: 10, fontWeight: '600', color: 'white'}}>
                 예상 여유시간
               </Text>
               <Text style={{fontSize: 21, fontWeight: '800', color: 'white'}}>
-                NN분
+                {getTimeDifferenceString(
+                  subtractMinutesToTime(Data.departureTime, 20),
+                  addMinutesToTime(time, delay),
+                )}
+                분
               </Text>
             </View>
             <View style={styles.subTimeContainer5}>
@@ -427,7 +488,9 @@ function HomeScreen({route}) {
                 <Text style={styles.littleText}>탑승</Text>
                 <Text style={styles.littleText}>시작</Text>
               </View>
-              <Text style={styles.littleText1}>NN:NN</Text>
+              <Text style={styles.littleText1}>
+                {subtractMinutesToTime(Data.departureTime, 20)}
+              </Text>
             </View>
           </View>
         </View>
