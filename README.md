@@ -146,7 +146,7 @@ React Native에서 한국공항공사 및 기상청 공공 API 직접 호출 시
 ## 👥 팀 구성 및 역할
 |<img src="https://avatars.githubusercontent.com/u/44336444?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/27201345?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/126761282?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/5442985?v=4" width="150" height="150"/>|
 |:-:|:-:|:-:|:-:|
-|안예원<br/>|강대렬<br/>|김한율<br/>|권혁원<br/>|
+|안예원<br/>PM / BackEnd|강대렬<br/>BackEnd|김한율<br/>BackEnd|권혁원<br/>UI·UX / APP / Firebase|
 
 ## 🏆 성과
 - 2023 교내 오픈소스개발론 팀 프로젝트 **1위**
