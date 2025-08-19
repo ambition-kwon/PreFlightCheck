@@ -75,15 +75,15 @@
 
 ```
 PreFlightCheck/
-├── App.js                    # 앱 진입점, Context Provider 설정
-├── screens/                  # 화면 컴포넌트
-├── components/              # 재사용 가능한 UI 컴포넌트
-│   ├── loginscreen/           # 로그인 관련 컴포넌트
-│   ├── selectscreen/          # 일정 선택 관련 컴포넌트
-│   └── parkingscreen/         # 주차장 관련 컴포넌트
+├── App.js                  # 앱 진입점, Context Provider 설정
+├── screens/                # 화면 컴포넌트
+├── components/             # 재사용 가능한 UI 컴포넌트
+│   ├── loginscreen/        # 로그인 관련 컴포넌트
+│   ├── selectscreen/       # 일정 선택 관련 컴포넌트
+│   └── parkingscreen/      # 주차장 관련 컴포넌트
 ├── contexts/               # Context-API 상태 관리
-│   ├── LoginContext.js        # 사용자 인증 상태
-│   └── DataContext.js         # 앱 데이터 상태
+│   ├── LoginContext.js     # 사용자 인증 상태
+│   └── DataContext.js      # 앱 데이터 상태
 ├── lib/                    # 비즈니스 로직 및 API
 ├── asset/                  # 이미지 및 정적 자산
 └── proxy-server.js         # 외부 API CORS 해결을 위한 프록시 서버
