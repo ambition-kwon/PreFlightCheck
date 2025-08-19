@@ -28,7 +28,7 @@
 
 **📱 프로토타입**: [Figma 바로가기](https://www.figma.com/proto/FHKA7XKusg2gJTw7tNCYab/CodingHoliday_PreFlightCheck?type=design&node-id=36-307&scaling=scale-down&page-id=0%3A1&starting-point-node-id=36%3A307)
 
-**🌐 발표자료**: [PPT 바로가기](https://www.canva.com/design/DAFlVSvWag8/PR6kFJ5NJDO14f23SrzRug/view?utm_content=DAFlVSvWag8&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink)
+**🌐 발표자료**: [PPT 바로가기](https://www.canva.com/design/DAFlVSvWag8/jlShzlb25Df6ffe8IQTEUw/view?utm_content=DAFlVSvWag8&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h3cadf82167)
 
 
 ## ✨ 주요 기능
