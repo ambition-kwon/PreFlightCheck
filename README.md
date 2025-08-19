@@ -8,8 +8,7 @@
   - Firebase 기반 사용자 인증 및 일정 관리 시스템 구현
   - 한국공항공사 API와 기상청 API를 활용한 실시간 데이터 연동
 
-![Landing Page](https://github.com/user-attachments/assets/a7e5b026-9db1-4e24-9d03-70b4ea85c035)
-
+![Landing Page](https://github.com/user-attachments/assets/a025e2c5-e994-4056-8963-74384c80f0e2)
 
 
 ## 📌 프로젝트 개요
